@@ -30,11 +30,11 @@ def stats() -> str:
 def test_unauthorized():
     """ Test unauthorized
     """
-    abort(401)
+    return abort(401)
 
 
 @app_views.route('/forbidden', strict_slashes=False)
 def test_forbidden():
     """ Test forbidden
     """
-    abort(403)
+    return abort(403)
