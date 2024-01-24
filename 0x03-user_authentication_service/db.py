@@ -4,8 +4,9 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
-
+from sqlalchemy.orm.exc import NoResultFound
 from user import Base, User
+from typing import Dict, Optional, Any, Union
 
 
 class DB:
@@ -39,3 +40,23 @@ class DB:
         self._session.add(user)
         self._session.commit()
         return user
+
+    def find_user_by(self, **kwargs: Union[int, Dict[str, Any]]) -> Optional[
+            User]:
+        """ Finds a user from database based kwargs
+        """
+        records = self._session.query(User).filter_by(**kwargs).first()
+        if records is None:
+            raise NoResultFound
+        return records
+
+    def update_user(self, user_id: int, **kwargs: Dict[str, Any]) -> None:
+        """ Updates user records
+        """
+        user_recods  = self.find_user_by(id=user_id)
+
+        for key, new_value in kwargs.items():
+            if hasattr(user_recods, key):
+                setattr(user_recods, key, new_value)
+            else:
+                raise ValueError
