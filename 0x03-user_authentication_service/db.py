@@ -58,5 +58,6 @@ class DB:
         for key, new_value in kwargs.items():
             if hasattr(user_recods, key):
                 setattr(user_recods, key, new_value)
+                self._session.commit()
             else:
                 raise ValueError
