@@ -92,3 +92,15 @@ class Auth:
             self._db._session.commit()
         except NoResultFound:
             return None
+
+    def get_reset_password_token(self, email: str) -> str:
+        """ sets and retrieves the reset token
+        """
+        try:
+            record = self._db.find_user_by(email=email)
+            reset_token = _generate_uuid()
+            record.reset_token = reset_token
+            self._db._session.commit()
+            return reset_token
+        except NoResultFound:
+            raise ValueError
