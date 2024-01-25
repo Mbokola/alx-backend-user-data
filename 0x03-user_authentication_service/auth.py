@@ -10,7 +10,7 @@ import bcrypt  # type: ignore
 import uuid
 
 
-def _hash_password(password) -> bytes:
+def _hash_password(password):
     """ Encrypts user password
     """
     password_byte_encoding = password.encode('utf-8')
