@@ -45,15 +45,16 @@ class DB:
 
     def find_user_by(self, **kwargs: Union[int, Dict[str, Any]]) -> Optional[
             User]:
-        """ Finds a user from database based kwargs
-        """
+        """ Finds a user from the database based on kwargs """
         try:
             records = self._session.query(User).filter_by(**kwargs).first()
             if records is None:
                 raise NoResultFound
             return records
-        except InvalidRequestError:
-            raise InvalidRequestError
+        except NoResultFound as e:
+            raise e
+        except InvalidRequestError as e:
+            raise e
 
     def update_user(self, user_id: int, **kwargs: Dict[str, Any]) -> None:
         """ Updates user records
