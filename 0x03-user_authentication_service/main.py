@@ -2,7 +2,7 @@
 """ Main module
 """
 
-import requests  # type: ignore
+import requests
 import json
 
 

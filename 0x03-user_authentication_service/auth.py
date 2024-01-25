@@ -33,15 +33,6 @@ class Auth:
     def __init__(self):
         self._db = DB()
 
-    def _hash_password(self, password: str) -> bytes:
-        """ Encrypts user password
-        """
-        password_byte_encoding = password.encode('utf-8')
-        salt = bcrypt.gensalt()
-        salted_hashed_passwod = bcrypt.hashpw(password_byte_encoding, salt)
-
-        return salted_hashed_passwod
-
     def register_user(self, email: str, password: str) -> User:
         """ Registers/creates a new user
         """
