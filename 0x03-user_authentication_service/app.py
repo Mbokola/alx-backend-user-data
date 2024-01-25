@@ -28,7 +28,7 @@ def users():
         created_user = AUTH.register_user(email, password)
 
         return jsonify({
-            "eamil": created_user.email,
+            "email": created_user.email,
             "message": "user created"
             })
     except ValueError:
@@ -69,8 +69,9 @@ def logout():
     if record:
         user_id = record.id
         AUTH.destroy_session(user_id)
-        redirect(url_for("/"))
-    abort(403)
+        return redirect(url_for("root_path"))
+    else:
+        return abort(403)
 
 
 @app.route("/profile", strict_slashes=False)
