@@ -6,6 +6,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
 from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy.exc import InvalidRequestError
 from user import Base, User
 from typing import Dict, Optional, Any, Union
 
@@ -46,10 +47,13 @@ class DB:
             User]:
         """ Finds a user from database based kwargs
         """
-        records = self._session.query(User).filter_by(**kwargs).first()
-        if records is None:
-            raise NoResultFound
-        return records
+        try:
+            records = self._session.query(User).filter_by(**kwargs).first()
+            if records is None:
+                raise NoResultFound
+            return records
+        except InvalidRequestError:
+            raise InvalidRequestError
 
     def update_user(self, user_id: int, **kwargs: Dict[str, Any]) -> None:
         """ Updates user records
