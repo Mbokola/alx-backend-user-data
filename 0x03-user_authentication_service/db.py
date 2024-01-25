@@ -54,7 +54,7 @@ class DB:
     def update_user(self, user_id: int, **kwargs: Dict[str, Any]) -> None:
         """ Updates user records
         """
-        user_recods  = self.find_user_by(id=user_id)
+        user_recods = self.find_user_by(id=user_id)
 
         for key, new_value in kwargs.items():
             if hasattr(user_recods, key):
