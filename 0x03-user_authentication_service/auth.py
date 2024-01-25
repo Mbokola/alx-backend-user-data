@@ -10,11 +10,14 @@ import bcrypt  # type: ignore
 import uuid
 
 
-def _hash_password(password: str) -> bytes:
-    """takes a password and return its encoded bytes"""
+def _hash_password(password) -> bytes:
+    """ Encrypts user password
+    """
+    password_byte_encoding = password.encode('utf-8')
     salt = bcrypt.gensalt()
-    hashed_password = bcrypt.hashpw(password.encode('utf-8'), salt)
-    return hashed_password
+    salted_hashed_passwod = bcrypt.hashpw(password_byte_encoding, salt)
+
+    return salted_hashed_passwod
 
 
 def _generate_uuid() -> str:
