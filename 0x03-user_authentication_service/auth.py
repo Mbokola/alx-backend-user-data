@@ -1,26 +1,14 @@
 #!/usr/bin/env python3
-""" Auth module
-"""
+"""defines a method _hash_password"""
+import bcrypt
+import uuid
 from db import DB
 from user import User
-from sqlalchemy.exc import NoResultFound
-from typing import Union
-
-import bcrypt  # type: ignore
-import uuid
+from sqlalchemy.orm.exc import NoResultFound
 
 
 def _hash_password(password: str) -> bytes:
-    """ Encrypts user password
-    """
-    password_byte_encoding = password.encode('utf-8')
+    """takes a password and return its encoded bytes"""
     salt = bcrypt.gensalt()
-    salted_hashed_passwod = bcrypt.hashpw(password_byte_encoding, salt)
-
-    return salted_hashed_passwod
-
-
-def _generate_uuid() -> str:
-    """ generates a uuid and returns it
-    """
-    return str(uuid.uuid4())
+    hashed_password = bcrypt.hashpw(password.encode('utf-8'), salt)
+    return hashed_password
