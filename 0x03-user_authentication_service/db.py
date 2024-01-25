@@ -43,13 +43,13 @@ class DB:
         self._session.commit()
         return user
 
-    def find_user_by(self, **kwargs) -> User:
-        """Finds user based on given criteria"""
+    def find_user_by(self, **kwargs: Union[int, str]) -> User:
+        """ Finds a user from the database based on kwargs """
         try:
-            users = self._session.query(User).filter_by(**kwargs).first()
-            if not users:
+            records = self._session.query(User).filter_by(**kwargs).first()
+            if not records:
                 raise NoResultFound
-            return users
+            return records
         except InvalidRequestError as e:
             raise e
 
