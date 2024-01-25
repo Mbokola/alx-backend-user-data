@@ -43,16 +43,15 @@ class DB:
         self._session.commit()
         return user
 
-    def find_user_by(self, **kwargs: Union[int, str]) -> User:
-        """ Finds a user from the database based on kwargs """
-        key = (list(kwargs.keys())[0])
-        if key not in ["id", "email", "hashed_password",
-                       "session_id", "token_reset"]:
-            raise InvalidRequestError
-        records = self._session.query(User).filter_by(**kwargs).first()
-        if records is None:
-            raise NoResultFound
-        return records
+    def find_user_by(self, **kwargs) -> User:
+        """Finds user based on given criteria"""
+        try:
+            users = self._session.query(User).filter_by(**kwargs).first()
+            if not users:
+                raise NoResultFound
+            return users
+        except InvalidRequestError as e:
+            raise e
 
     def update_user(self, user_id: int, **kwargs: Dict[str, Any]) -> None:
         """ Updates user records
