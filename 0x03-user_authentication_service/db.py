@@ -8,7 +8,7 @@ from sqlalchemy.orm.session import Session
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.exc import InvalidRequestError
 from user import Base, User
-from typing import Dict, Optional, Any, Union
+from typing import Dict, Any, Union
 
 
 class DB:
@@ -45,13 +45,14 @@ class DB:
 
     def find_user_by(self, **kwargs: Union[int, str]) -> User:
         """ Finds a user from the database based on kwargs """
-        try:
-            records = self._session.query(User).filter_by(**kwargs).first()
-            if records is None:
-                raise NoResultFound
-            return records
-        except InvalidRequestError as e:
-            raise e
+        key = (list(kwargs.keys())[0])
+        if key not in ["id", "email", "hashed_password",
+                       "session_id", "token_reset"]:
+            raise InvalidRequestError
+        records = self._session.query(User).filter_by(**kwargs).first()
+        if records is None:
+            raise NoResultFound
+        return records
 
     def update_user(self, user_id: int, **kwargs: Dict[str, Any]) -> None:
         """ Updates user records
