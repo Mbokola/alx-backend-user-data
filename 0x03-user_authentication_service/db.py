@@ -47,7 +47,7 @@ class DB:
         """ Finds a user from the database based on kwargs """
         try:
             records = self._session.query(User).filter_by(**kwargs).first()
-            if not records:
+            if records is None:
                 raise NoResultFound
             return records
         except InvalidRequestError as e:
