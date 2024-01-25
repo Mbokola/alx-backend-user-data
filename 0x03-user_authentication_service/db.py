@@ -51,8 +51,6 @@ class DB:
             if records is None:
                 raise NoResultFound
             return records
-        except NoResultFound as e:
-            raise e
         except InvalidRequestError as e:
             raise e
 
