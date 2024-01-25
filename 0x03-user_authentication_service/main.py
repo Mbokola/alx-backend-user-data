@@ -1,8 +1,8 @@
 #!/usr/bin/python3
-""" Main module
+""" Main module, will be used to test flask application
 """
 
-import requests
+import requests  # type: ignore
 import json
 
 
