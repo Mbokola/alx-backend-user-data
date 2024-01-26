@@ -41,6 +41,7 @@ class Auth:
             raise ValueError(f"User {email} already exists")
         except NoResultFound:
             hashed_password = _hash_password(password)
+            self._db._session()
             self._db.add_user(email, hashed_password)
             created_user = self._db.find_user_by(email=email)
             return created_user
@@ -49,6 +50,7 @@ class Auth:
         """ Validatates password against hashed password using bcrypt
         """
         try:
+            self._db._session()
             existing_user = self._db.find_user_by(email=email)
             password_byte_encoding = password.encode('utf-8')
             result = bcrypt.checkpw(password_byte_encoding,
