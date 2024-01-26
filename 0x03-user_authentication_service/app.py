@@ -3,7 +3,7 @@
 """
 from flask import abort, Flask, request, jsonify, redirect, url_for
 from auth import Auth
-
+from sqlalchemy.orm.exc import NoResultFound
 
 AUTH = Auth()
 app = Flask(__name__)
@@ -109,19 +109,16 @@ def update_password():
     """
     email = request.form.get("email")
     new_password = request.form.get("new_password")
-    user_provided_reset_token = request.form.get("reset_token")
+    reset_token = request.form.get("reset_token")
 
     try:
-        reset_token = AUTH.get_reset_password_token(email)
-        if reset_token == user_provided_reset_token:
-            AUTH.update_password(reset_token, new_password)
-        else:
-            abort(403)
+        AUTH.find_user_by(reset_token=reset_token)
+        AUTH.update_password(reset_token, new_password)
         return jsonify({
             "email": email,
             "message": "Password updated"
             })
-    except ValueError:
+    except (NoResultFound, ValueError):
         abort(403)
 
 
